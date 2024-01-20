@@ -1,0 +1,177 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+vim.opt.mouse = 'a'
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+--vim.opt.termguicolors = true
+vim.wo.number = true
+vim.g.barbar_auto_setup = false
+vim.opt.autochdir = true
+
+if vim.env.VSCODE ~= nil then
+    local filename = vim.fn.expand("%:p")
+    vim.api.nvim_command("terminal code " .. filename .. " && exit")
+    vim.api.nvim_command("autocmd TermClose * qa!")
+end
+
+require'nvim-tree'.setup {
+	--sync_root_with_cwd = true,
+	--respect_buf_cwd = true,
+	update_cwd = true,
+	--update_focused_file = {
+	--	enable = true,
+	--	update_root = true
+	--},
+	disable_netrw = true,
+	hijack_cursor = true,
+	modified = {
+		enable = true
+	}
+}
+
+require'lualine'.setup { 
+    disabled_filetypes = {
+        'packer',
+        'NvimTree'
+    }
+}
+
+local pairs = require'nvim-autopairs'
+pairs.setup {
+	check_ts = true,
+}
+pairs.enable()
+
+--require'lspconfig/quick_lint_js'
+--local nvim_lsp = require'lspconfig'
+
+require'barbar'.setup {
+	exclude_ft = {''}
+}
+require'nvim-treesitter.configs'.setup{highlight={enable=true}}
+
+local treeapi = require'nvim-tree.api'
+local api = vim.api
+
+--local quicknote = require'quicknote'
+--quicknote.setup {
+--    mode = "resident"
+--}
+
+--treeapi.tree.open()
+
+local termOpen = false
+
+vim.api.nvim_command("autocmd TermOpen * startinsert")
+vim.api.nvim_command("autocmd TermOpen * setlocal nonumber")
+vim.api.nvim_command("autocmd TermOpen * setlocal nomodified")
+vim.api.nvim_command("autocmd TermEnter * setlocal signcolumn=no")
+vim.api.nvim_command("autocmd BufEnter * silent! lcd %:p:h")
+vim.api.nvim_command([[autocmd FileType text set wrap linebreak | set display=truncate | hi Comment gui=italic,bold | 
+hi clear String | hi clear Constant]])
+vim.api.nvim_command("autocmd FileType markdown set wrap linebreak | set display=truncate | syntax match Todo /TODO/")
+
+vim.api.nvim_set_keymap('n', ",", ":wa<CR>:qa!<CR>", { silent = true })
+vim.api.nvim_set_keymap("n", ".", ":w<CR>", { silent = true })
+vim.api.nvim_set_keymap("i", "<C-s>", "<Esc>:w<CR><Right>i", { silent = true })
+vim.api.nvim_set_keymap('n', 'q', ":<C-u> silent! w!<CR>:q!<CR>", { silent = true })
+vim.api.nvim_set_keymap('n', 't', ":botright 10sp term://fish<CR>", {silent = true})
+vim.api.nvim_set_keymap('n', '<2-LeftMouse>', 'i', { silent = true })
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { silent = true })
+vim.api.nvim_set_keymap('', '<Esc>', '<Esc><Esc>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', 'c', ':cd %:h<CR>', { silent = true })
+--vim.api.nvim_set_keymap('n', 'w', 'g<C-g>', { silent = true })
+vim.api.nvim_set_keymap('n', '<C-S-Left>', '<C-W>H', { silent = true })
+vim.api.nvim_set_keymap('n', '<C-S-Down>', '<C-W>J', { silent = true })
+vim.api.nvim_set_keymap('n', '<C-S-Up>', '<C-W>K', { silent = true })
+vim.api.nvim_set_keymap('n', '<C-S-Right>', '<C-W>L', { silent = true })
+vim.api.nvim_set_keymap('n', 'o', ':NvimTreeOpen<CR>', { silent = true })
+vim.api.nvim_set_keymap('i', '<C-BS>', "<C-W>", { silent = true })
+
+--vim.keymap.set('n', '`', function()
+--    quicknote.NewNoteAtCurrentLine()
+--    quicknote.OpenNoteAtCurrentLine()
+--end)
+
+vim.api.nvim_set_keymap('n', 'ga', ':! git add .', { silent = true })
+
+require'flatten'.setup {
+    window = {
+        open = "alternate"
+    }
+}
+
+vim.cmd [[ silent !i3-msg "split v" ]]
+
+require"packer".startup(function(use)
+
+    use { 'willothy/flatten.nvim', config = true }
+    if os.getenv("NVIM") ~= nil then
+        return
+    end
+
+    use 'wbthomason/packer.nvim'
+    use 'nvim-lua/plenary.nvim'
+    use 'RutaTang/quicknote.nvim'
+    use 'nvim-tree/nvim-web-devicons'
+    use { "bluz71/vim-nightfly-colors", as = "nightfly" }
+    use 'nvim-tree/nvim-tree.lua'
+    use 'romgrk/barbar.nvim'
+    use 'dylanaraps/wal.vim'
+    use 'windwp/nvim-autopairs'
+    use 'neovim/nvim-lspconfig'
+    use { 'nvim-treesitter/nvim-treesitter', run = function() 
+	    local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+	    ts_update()
+	end,
+    }
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-cmdline'
+    use 'hrsh7th/nvim-cmp'
+    use 'L3MON4D3/LuaSnip'
+    use 'saadparwaiz1/cmp_luasnip'
+    use 'savq/melange-nvim'
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = {'nvim-tree/nvim-web-devicons', opt=true}
+    }
+    use 'navarasu/onedark.nvim'
+    use 'chrisgrieser/nvim-spider'
+end)
+
+vim.keymap.set({"n", "o", "x"}, "w", "<cmd>lua require('spider').motion('w')<CR>", { desc = "Spider-w" })
+vim.keymap.set({"n", "o", "x"}, "e", "<cmd>lua require('spider').motion('e')<CR>", { desc = "Spider-e" })
+vim.keymap.set({"n", "o", "x"}, "b", "<cmd>lua require('spider').motion('b')<CR>", { desc = "Spider-b" })
+vim.keymap.set({"n", "o", "x"}, "ge", "<cmd>lua require('spider').motion('ge')<CR>", { desc = "Spider-ge" })
+
+vim.opt.termguicolors = true
+
+--vim.cmd [[colorscheme wal]]
+--vim.cmd [[colorscheme nightfly]]
+--vim.cmd [[ colorscheme melange ]]
+
+local onedark = require'onedark'
+
+onedark.setup {
+    style = 'warmer'
+}
+
+onedark.load()
+
+--vim.cmd [[botright 10sp term://fish]]
+
+--local capabilities = require'cmp_nvim_lsp'.default_capabilities() 
+--nvim_lsp.quick_lint_js.setup{
+--    capabilities = capabilities
+--}
+
+vim.cmd [[ syn region math start=/\\$\\$/ end=/\\$\\$/ ]]
+vim.cmd [[ syn match math '\\$[^$].\\{-}\\$' ]]
+vim.cmd [[ hi link math Statement ]]
+
+vim.opt.laststatus = 3

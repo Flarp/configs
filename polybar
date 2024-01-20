@@ -1,0 +1,329 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = #282A2E
+background-darker = #141517
+background-alt = #373B41
+foreground = #C5C8C6
+primary = #F0C674
+secondary = #8ABEB7
+alert = #b8b8d1
+disabled = #707880
+
+zero = #ed4800
+first = #ff580f
+second = #ff6923
+third = #ff7637
+fourth = #ff874b
+fifth = #ff945f
+sixth = #ffa473
+seventh = #ffd5bf
+
+[bar/example]
+width = 100%
+height = 16pt
+;radius = 6
+
+; dpi = 96
+
+background = ${colors.background}
+foreground = ${colors.first}
+
+line-size = 3pt
+
+;border-size = 4pt
+;border-color = #00000000
+
+padding-left = 0
+;padding-right = 1
+
+; module-margin = 1
+
+separator = ""
+separator-foreground = ${colors.disabled}
+
+font-0 = Hack Nerd Font Mono:pixelsize=10;3
+font-1 = Hack Nerd Font Mono:pixelsize=15;3
+font-2 = Hack Nerd Font Mono:style=Bold:pixelsize=10;3
+font-3 = Hack Nerd Font Mono:size=15;3
+font-4 = Hack Nerd Font Mono:pixelsize=26;6
+
+modules-left = i3 
+modules-right = filesep filesystem memsep memory batsep battery cpusep cpu volsep pulseaudio datesep date traysep
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+enable-ipc = true
+
+
+monitor = ${env:MONITOR:}
+bottom = ${env:BOTTOM:}
+tray-position = ${env:TRAY:}
+tray-padding = 5px
+tray-background = ${colors.zero}
+tray-foreground = ${colors.background-darker}
+tray-maxsize = 24
+tray-scale = 1.0
+
+; wm-restack = generic
+; wm-restack = bspwm
+;wm-restack = i3
+
+;override-redirect = true
+;
+
+[module/traysep]
+type = custom/text
+content = ""
+content-font = 2
+content-foreground = ${colors.zero}
+content-background = ${colors.first}
+
+[module/memsep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.fifth}
+content-background = ${colors.sixth}
+
+[module/volsep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.second}
+content-background = ${colors.third}
+
+[module/filesep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.sixth}
+content-background = ${colors.background}
+
+[module/cpusep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.third}
+content-background = ${colors.fourth}
+
+[module/batsep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.fourth}
+content-background = ${colors.fifth}
+
+[module/datesep]
+type = custom/text
+content = " "
+content-font = 2
+content-foreground = ${colors.first}
+content-background = ${colors.second}
+
+[module/xworkspaces]
+type = internal/xworkspaces
+
+label-active = %name%
+label-active-background = ${colors.background-alt}
+label-active-underline= ${colors.primary}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/i3]
+type = internal/i3
+
+format = <label-mode><label-state>
+strip-wsnumbers = true
+
+pin-workspaces = true
+index-sort = true
+enable-click = true 
+enable-scroll = false
+ws-icon-0 = 10;0[]
+ws-icon-1 = 1:firefox:1; 
+ws-icon-2 = 2:discord:2;󰙯
+ws-icon-3 = 3:code:3;󰨞
+ws-icon-4 = 4:alacritty:4;
+ws-icon-5 = 5:other:5;
+ws-icon-6 = 6:other:6;
+ws-icon-7 = 7:other:7;
+ws-icon-8 = 8:other:8;
+ws-icon-9 = 9:other:9;
+
+label-unfocused = %{T4} %icon%%{T-}  %index% %{T4}%{F#282A2E}%{O-1}%{F-}%{T-}
+label-visible = %{T4} %icon%%{T-}  %index% %{T4}%{F#282A2E}%{O-1}%{F-}%{T-}
+label-focused = %{R}%{T4} %icon%%{T-}  %index% %{R}%{T4}%{O-1}%{T-}
+label-urgent = %{F#b8b8d1}%{R}%{T4} %icon%%{T-}  %index% %{R}%{T4}%{O-1}%{T-}%{F-}
+;animation-urgent-0 = %{F#FFA473}%{R}%{T4} %icon%%{T-}  %index% %{R}%{T4}%{O-1}%{T-}%{F-}
+;animation-urgent-1 = %{R}%{F#FFA473}%{R}%{T4} %icon%%{T-}  %index% %{R}%{T4}%{O-1}%{T-}%{F-}
+;animation-urgent-framerate = 1000
+label-mode = %{B#b8b8d1}%{F#282A2E}%{T4}%{R}%{R}%{T-} %mode% %{F-}%{B-}
+
+;label-focused-background = ${colors.first}
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = " %{T4}󰗮%{T-} %percentage_used%%"
+label-mounted-foreground = ${colors.background}
+label-mounted-background = ${colors.sixth}
+
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.background}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume-prefix = " %{T4}󰕾%{T-} "
+format-volume-prefix-foreground = ${colors.background}
+format-volume = <label-volume>
+format-volume-foreground = ${colors.background}
+format-volume-background = ${colors.second}
+
+label-volume = %percentage%%
+
+label-muted = " %{T4}󰝟%{T-}"
+label-muted-foreground = ${colors.background}
+label-muted-background = ${colors.second}
+;label-muted-foreground = ${colors.disabled}
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+label-layout = %layout%
+label-layout-foreground = ${colors.primary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-foreground = ${colors.background}
+label-indicator-background = ${colors.secondary}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " %{T4}󰍛%{T-} "
+format-prefix-foreground = ${colors.background}
+format-prefix-background = ${colors.fifth}
+label = %percentage_used:2%%
+label-background = ${colors.fifth}
+label-foreground = ${colors.background}
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " %{T4}%{T-} "
+format-prefix-foreground = ${colors.background}
+format-prefix-background = ${colors.third}
+label = %percentage:2%%
+label-foreground = ${colors.background}
+label-background = ${colors.third}
+
+[network-base]
+type = internal/network
+interval = 5
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+label-disconnected = %{F#F0C674}%ifname%%{F#707880} disconnected
+
+[module/wlan]
+inherit = network-base
+interface-type = wireless
+label-connected = %{F#F0C674}%ifname%%{F-} %essid% %local_ip%
+
+[module/eth]
+inherit = network-base
+interface-type = wired
+label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%
+
+[module/date]
+type = internal/date
+interval = 1
+date = %I:%M %p %Y-%m-%d
+date-alt = %Y-%m-%d %H:%M:%S
+
+label = " %{T4}%{T-} %date% "
+label-foreground = ${colors.background-darker}
+label-background = ${colors.first}
+;label-font = 3
+
+[module/battery]
+type = internal/battery
+battery = BAT1
+
+format-charging = "%{T4}<animation-charging>%{T-} <label-charging>"
+format-discharging = "%{T4}<ramp-capacity>%{T-} <label-discharging>"
+format-full = "%{T4}<ramp-capacity>%{T-} <label-full>"
+
+label-charging = %percentage%%
+label-discharging = %percentage%%
+label-full = %percentage%%
+
+label-charging-background = ${colors.fourth}
+label-discharging-background = ${colors.fourth}
+label-full-background = ${colors.fourth}
+label-discharging-foreground = ${colors.background}
+label-charging-foreground = ${colors.background}
+label-full-foreground = ${colors.background}
+
+format-discharging-background = ${colors.fourth}
+format-charging-background = ${colors.fourth}
+format-full-background = ${colors.fourth}
+format-discharging-foreground = ${colors.background}
+format-charging-foreground = ${colors.background}
+format-full-foreground = ${colors.background}
+
+animation-charging-0 = " "
+animation-charging-1 = " "
+animation-charging-2 = " "
+animation-charging-3 = " "
+animation-charging-4 = " "
+animation-charging-framerate = 750
+
+; Only applies if <ramp-capacity> is used
+ramp-capacity-0 = " "
+ramp-capacity-1 = " "
+ramp-capacity-2 = " "
+ramp-capacity-3 = " " 
+ramp-capacity-4 = " "
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+
+; vim:ft=dosini
